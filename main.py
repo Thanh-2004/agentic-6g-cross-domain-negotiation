@@ -28,7 +28,7 @@ except ImportError:
 from google.generativeai.types import generation_types
 import matplotlib.pyplot as plt
 import scipy.stats as stats
-from config import  POWER_PER_20MHZ_CARRIER_W, REFERENCE_BANDWIDTH_MHZ, REFERENCE_ENERGY_FOR_SAVINGS_W, SLA_LATENCY_THRESHOLD_MS, NUM_TIME_STEPS
+from config import  NUM_TRIALS, POWER_PER_20MHZ_CARRIER_W, REFERENCE_BANDWIDTH_MHZ, REFERENCE_ENERGY_FOR_SAVINGS_W, SLA_LATENCY_THRESHOLD_MS, NUM_TIME_STEPS
 
 import e2_api_tool
 import network_simulator
@@ -406,7 +406,7 @@ if __name__ == "__main__":
         print("Results loaded successfully.")
     else:
         print(f"Simulation results file {results_file_name} not found. Running full simulation...")
-        raw_data, summary_metrics = run_all_scenarios(num_trials=2) # Run with 100 trials
+        raw_data, summary_metrics = run_all_scenarios(num_trials=NUM_TRIALS) # Run with 100 trials
         print(f"Saving simulation results to {results_file_name}...")
         with open(results_file_name, 'wb') as f:
             pickle.dump((raw_data, summary_metrics), f)
