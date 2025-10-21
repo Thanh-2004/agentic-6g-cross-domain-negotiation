@@ -37,7 +37,6 @@ class DigitalTwin(NetworkSimulator):
         self.traffic = np.array([[current_metrics["current_traffic_arrival_rate_bps"]]])
         self.arrival_rate = current_metrics["average_traffic_arrival_rate_bps"]
 
-    # --- FIX STARTS HERE ---
     # Overridden get_metrics to handle the Digital Twin's simplified state.
     def get_metrics(self) -> Dict[str, Any]:
         """
@@ -61,7 +60,7 @@ class DigitalTwin(NetworkSimulator):
             "average_traffic_arrival_rate_bps": self.arrival_rate,
             "current_spectral_efficiency_bits_per_hz_per_s": self.current_spectral_efficiency
         }
-    # --- END OF FIX ---
+
 
     def simulate_step_for_prediction(self, proposed_ran_bandwidth_mhz: float, proposed_edge_cpu_frequency_ghz: float) -> Dict[str, float]:
         """
@@ -115,3 +114,4 @@ class DigitalTwin(NetworkSimulator):
             "predicted_energy_watts": predicted_energy_watts_dt,
             "predicted_cpu_allocation_conflict_count": cpu_conflict_dt
         }
+
