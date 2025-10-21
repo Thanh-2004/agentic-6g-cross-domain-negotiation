@@ -8,9 +8,6 @@ from collective_memory import CollectiveMemory
 from config import SLA_LATENCY_THRESHOLD_MS, REFERENCE_ENERGY_FOR_SAVINGS_W
 
 
-
-
-# + memory_guidance_prompt 
 class A2ANegotiationManager:
     def __init__(self, ran_agent: RanAgent, edge_agent: EdgeAgent, e2_api: E2APISimulator, collective_memory: Optional[CollectiveMemory], max_iterations: int = 8, trial_num: int = 0):
         self.ran_agent = ran_agent
@@ -536,4 +533,5 @@ class A2ANegotiationManager:
             "sla_violation_occurred": sla_violation_occurred,
             "average_energy_this_trial": final_energy_for_report,
             "average_latency_this_trial": final_latency_for_report
+
         }
