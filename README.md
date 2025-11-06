@@ -8,7 +8,17 @@ This project simulates an A2A-like negotiation between two LLM-powered agents, a
 
 ## Citation 
 If you use this code or any (modified) part of it, please cite it as: 
-H. Chergui, F. Rezazadeh, M. Debbah, and C. Verikoukis, “A Tutorial on Cognitive Biases in Agentic AI-Driven 6G Autonomous Networks,” arXiv preprint arXiv:2510.19973, 2025. [Online]. Available: https://arxiv.org/abs/2510.19973
+```bibtex
+@misc{chergui2025tutorialcognitivebiasesagentic,
+      title={A Tutorial on Cognitive Biases in Agentic AI-Driven 6G Autonomous Networks}, 
+      author={Hatim Chergui and Farhad Rezazadeh and Merouane Debbah and Christos Verikoukis},
+      year={2025},
+      eprint={2510.19973},
+      archivePrefix={arXiv},
+      primaryClass={cs.NI},
+      url={https://arxiv.org/abs/2510.19973}, 
+}
+```
 
 ## Project Structure
 
