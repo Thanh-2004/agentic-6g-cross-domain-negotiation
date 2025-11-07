@@ -15,7 +15,7 @@ from config import NUM_TIME_STEPS
 import network_simulator
 
 
-# Import the parsing function from the new module instead of the whole manager.
+# Import the parsing function
 from negotiation_parser import parse_agent_message
 
 
@@ -604,4 +604,5 @@ class LLMAgent:
             self.last_proposed_config = parsed_move["parameters"]
 
         return final_negotiation_message
+
 
