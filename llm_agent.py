@@ -166,7 +166,7 @@ class LLMAgent:
                                 print(f"[{self.name}] Warning: Tool result for {function_name} is not a dict: {parsed_result}. Converting to empty dict.") # Corrected line
                                 parsed_result = {}
                             
-                            # MODIFIED: Ensure parsed_result is never an empty dictionary
+                            # Ensure parsed_result is never an empty dictionary
                             if not parsed_result:
                                 parsed_result = {"status": "success", "message": "Tool executed, but returned no specific data."}
 
@@ -340,7 +340,7 @@ class LLMAgent:
                                 print(f"[{self.name}] Warning: Tool result for {output_item['function_name']} is not a dict: {parsed_result}. Converting to empty dict.") # Corrected line
                                 parsed_result = {}
                             
-                            # MODIFIED: Ensure parsed_result is never an empty dictionary
+                            # Ensure parsed_result is never an empty dictionary
                             if not parsed_result:
                                 parsed_result = {"status": "success", "message": "Tool executed, but returned no specific data."}
 
@@ -604,5 +604,6 @@ class LLMAgent:
             self.last_proposed_config = parsed_move["parameters"]
 
         return final_negotiation_message
+
 
 
