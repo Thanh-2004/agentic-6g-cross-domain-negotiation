@@ -21,11 +21,15 @@ from negotiation_parser import parse_agent_message
 
 from config import SLA_LATENCY_THRESHOLD_MS
 
+from llm_wrapper import *
+
 # Configure the genai library
 try:
     genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 except Exception as e:
     print(f"Could not configure Google Generative AI: {e}")
+
+from langchain_ollama import ChatOllama
 
 class LLMAgent:
     def __init__(self, name: str, role: str, model_name: str = 'gemini-2.5-flash-preview-05-20', tools: List[Any] = None,
@@ -38,7 +42,13 @@ class LLMAgent:
         if tools:
             all_tools.extend(tools)
 
-        self.model = genai.GenerativeModel(model_name=model_name, tools=all_tools)
+        # self.model = genai.GenerativeModel(model_name=model_name, tools=all_tools)
+        self.model = LLMWrapper(ChatOllama(
+                        model="llama3",
+                        temperature=0.7,
+                        format="json"
+                    ))
+
         self.chat_session = self.model.start_chat(history=[]) # Initialize chat session here once
         self.negotiation_goal = ""
         self.last_proposed_config = None
