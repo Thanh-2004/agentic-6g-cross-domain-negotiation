@@ -51,7 +51,7 @@ class RanAgent(LLMAgent):
         ).format(SLA_LATENCY_THRESHOLD_MS)
 
         self.chat_session.history.append({
-            "role": "user",
+            "role": "system",
             "parts": [
                 {"text": initial_prompt_text_base + tool_usage_prompt}
             ]
@@ -102,7 +102,7 @@ class EdgeAgent(LLMAgent):
         ).format(SLA_LATENCY_THRESHOLD_MS)
 
         self.chat_session.history.append({
-            "role": "user",
+            "role": "system",
             "parts": [
                 {"text": initial_prompt_text_base + tool_usage_prompt}
             ]

@@ -2,7 +2,7 @@ from langchain_ollama import ChatOllama
 from langchain_core.messages import HumanMessage
 
 llm = ChatOllama(
-    model = "llama3.2:1b",
+    model = "gpt-oss:20b",
     temperature=0.7
 )
 

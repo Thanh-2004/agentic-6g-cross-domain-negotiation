@@ -22,7 +22,7 @@ class MockCandidate:
 
 class MockResponse:
     def __init__(self, text):
-        self.text = ext
+        self.text = text
         self.candidates = [MockCandidate(text)]
 
 class LangchainSessionAdapter:
@@ -31,15 +31,47 @@ class LangchainSessionAdapter:
         ## Simple chat history
         self.history = history if history else []
 
+    # def send_message(self, content: Any) -> MockResponse:
+    #     '''
+    #     Alternative function for chat_session.senf_message
+    #     :param content: input for LLM
+    #     :return: LLM message
+    #     '''
+    #
+    #     prompt_text = ""
+    #
+    #     if isinstance(content, list):
+    #         for part in content:
+    #             if isinstance(part, dict) and "text" in part:
+    #                 prompt_text += part["text"] + "\n"
+    #             elif hasattr(part, "text"):
+    #                 prompt_text += part.text + "\n"
+    #             else:
+    #                 prompt_text += str(part) + "\n"
+    #     else:
+    #         prompt_text = str(content)
+    #
+    #     messages = self.history + [HumanMessage(content=prompt_text)]
+    #
+    #     try:
+    #         ai_message = self.llm.invoke(messages)
+    #         response_text = ai_message.content
+    #     except Exception as e:
+    #         logging.error(f"LangChain invoke failed: {e}")
+    #         response_text = "NO_AGREEMEN_POSSIBLE: Error calling external LLM"
+    #
+    #     self.history.append(HumanMessage(content=prompt_text))
+    #     self.history.append(AIMessage(content=response_text))
+    #
+    #     return MockResponse(response_text)
+
     def send_message(self, content: Any) -> MockResponse:
         '''
-        Alternative function for chat_session.senf_message
-        :param content: input for LLM
-        :return: LLM message
+        Hàm thay thế cho chat_session.send_message, xử lý chuyển đổi history
         '''
-
         prompt_text = ""
 
+        # 1. Chuyển đổi content input thành text
         if isinstance(content, list):
             for part in content:
                 if isinstance(part, dict) and "text" in part:
@@ -51,21 +83,47 @@ class LangchainSessionAdapter:
         else:
             prompt_text = str(content)
 
-        messages = self.history + HumanMessage(content=prompt_text)
+        # 2. QUAN TRỌNG: Chuyển đổi self.history từ format Google (dict) sang LangChain (Message objects)
+        # Nếu không có bước này, LLM sẽ không đọc được Prompt hướng dẫn ban đầu.
+        messages_to_send = []
+        for item in self.history:
+            if isinstance(item, dict):
+                # Trích xuất text từ cấu trúc dict: {"role": "...", "parts": [{"text": "..."}]}
+                text_content = ""
+                if "parts" in item:
+                    for part in item["parts"]:
+                        if isinstance(part, dict):
+                            text_content += part.get("text", "")
+                        else:
+                            text_content += str(part)
+
+                role = item.get("role", "user")
+                if role == "user":
+                    messages_to_send.append(HumanMessage(content=text_content))
+                elif role == "model":
+                    messages_to_send.append(AIMessage(content=text_content))
+                else:
+                    messages_to_send.append(SystemMessage(content=text_content))
+            else:
+                # Nếu đã là object Message của LangChain thì giữ nguyên
+                messages_to_send.append(item)
+
+        # Thêm tin nhắn hiện tại vào cuối danh sách
+        messages_to_send.append(HumanMessage(content=prompt_text))
 
         try:
-            ai_message = self.llm.invoke(message)
+            # Gửi toàn bộ lịch sử đã chuẩn hóa cho LLM
+            ai_message = self.llm.invoke(messages_to_send)
             response_text = ai_message.content
         except Exception as e:
             logging.error(f"LangChain invoke failed: {e}")
-            response_text = "NO_AGREEMEN_POSSIBLE: Error calling external LLM"
+            response_text = "NO_AGREEMENT_POSSIBLE: Error calling external LLM"
 
+        # Cập nhật history (giữ nguyên để dùng cho vòng sau)
         self.history.append(HumanMessage(content=prompt_text))
         self.history.append(AIMessage(content=response_text))
 
         return MockResponse(response_text)
-
-
 
 class LLMWrapper:
     def __init__(self, langchain_llm: BaseChatModel):

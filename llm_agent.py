@@ -44,9 +44,9 @@ class LLMAgent:
 
         # self.model = genai.GenerativeModel(model_name=model_name, tools=all_tools)
         self.model = LLMWrapper(ChatOllama(
-                        model="llama3",
+                        model="gpt-oss:20b",
                         temperature=0.7,
-                        format="json"
+                        # format="json"
                     ))
 
         self.chat_session = self.model.start_chat(history=[]) # Initialize chat session here once
